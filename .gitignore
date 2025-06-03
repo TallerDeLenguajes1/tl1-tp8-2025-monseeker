@@ -119,7 +119,7 @@ ipch/
 *.VC.VC.opendb
 
 # Visual Studio profiler
-*visual/
+*.vscode/
 *.psess
 *.vsp
 *.vspx
