@@ -6,3 +6,4 @@ public class Tarea {
  // Puedes añadir un constructor y métodos auxiliares si lo consideras necesario
 }
 
+//Tarea [random.Next()] tareaPendiente;
