@@ -30,7 +30,7 @@ namespace distribuidora
         }
 
         public void MostrarTareas(){
-            Console.WriteLine($"{TareaID, -1} | {Descripcion, -25} | {Duracion, -10}");
+            Console.WriteLine($"{TareaID, -5} | {Descripcion, -30} | {Duracion, -10}");
         }
     }
 }

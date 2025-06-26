@@ -18,7 +18,7 @@ bool otraEleccion = false;
 do
 {
     bool datoValido = false;
-    Console.WriteLine("\tMENU");
+    Console.WriteLine("-------------------------MENU--------------------------");
     Console.WriteLine("1. Presione 1 si desea marcar una tarea como realizada.");
     Console.WriteLine("2. Presione 2 si desea buscar un tarea por descripcion.");
     Console.WriteLine("3. Presione 3 si desea ver un listado de todas las tareas.\n");
@@ -79,57 +79,42 @@ do
 
 
 void PasarTareaARealizada(List<Tarea> TareasPendientes){
-    bool DatoBienIngresado = false;
-    do
+    Console.WriteLine("\n----------------TAREAS PENDIENTES-----------------");
+    foreach (Tarea pendiente in TareasPendientes)
     {
-        Console.WriteLine("\nDesea marcar alguna tarea como realizada?\n1.Si\t0.No");
-        string cadena = Console.ReadLine();
-        if (int.TryParse(cadena, out int desicion))
+        pendiente.MostrarTareas();
+    }
+    Console.WriteLine("\n");
+    Console.WriteLine("Ingrese el ID de la tarea realizada.");
+    Console.Write("ID: ");
+    string cadena = Console.ReadLine();
+    Console.WriteLine("\n");
+    if (int.TryParse(cadena, out int id))
+    {
+        Tarea tareaSeleccionada = null;
+        foreach (Tarea pendiente in TareasPendientes)
         {
-            switch (desicion)
+            if (pendiente.TareaID == id)
             {
-                case 1:
-                    DatoBienIngresado = true;
-                    Console.WriteLine("Ingrese el ID de la tarea realizada.");
-                    Console.Write("ID: ");
-                    cadena = Console.ReadLine();
-                    Console.WriteLine("\n");
-                    if (int.TryParse(cadena, out int id))
-                    {
-                        Tarea tareaSeleccionada = null;
-                        foreach (Tarea pendiente in TareasPendientes)
-                        {
-                            if (pendiente.TareaID == id)
-                            {
-                                pendiente.MostrarTareas();
-                                Console.WriteLine("\n");
-                                tareaSeleccionada = pendiente;
-                                break;
-                            }
-                        }
-                        if (tareaSeleccionada != null)
-                        {
-                            TareasRealizadas.Add(tareaSeleccionada);
-                            TareasPendientes.Remove(tareaSeleccionada);
-                        } else {
-                            Console.WriteLine("No se encontro ninguna tarea de ID ", id ,"\n");
-                        }
-                    } else {
-                        Console.WriteLine("Ingrese un numero.\n");
-                    }
-                    break;
-                case 0:
-                    DatoBienIngresado = true;
-                    break;
-                default:
-                    Console.WriteLine("Ingrese un numero valido.\n");
-                    break;
+                pendiente.MostrarTareas();
+                Console.WriteLine("\n");
+                tareaSeleccionada = pendiente;
+                break;
             }
-        } else {
-            Console.WriteLine("Ingrese un numero.\n");
         }
-    } while (!DatoBienIngresado);
+        if (tareaSeleccionada != null)
+        {
+            TareasRealizadas.Add(tareaSeleccionada);
+            TareasPendientes.Remove(tareaSeleccionada);
+        } else {
+            Console.WriteLine($"No se encontro ninguna tarea de ID {id}.\n");
+        }
+    } else {
+        Console.WriteLine("Ingrese un numero.\n");
+    }
 }
+       
+
 
 void BuscarPorDescripcion(List<Tarea> TareasPendientes){
     Console.Write("\nIngrese descripcion a buscar: ");
@@ -137,27 +122,36 @@ void BuscarPorDescripcion(List<Tarea> TareasPendientes){
     bool coincidencias = false;
     foreach (Tarea pendiente in TareasPendientes)
     {
-        if (pendiente.Descripcion.Contains(DescripcionABuscar))
+        if (pendiente.Descripcion.ToLower().Contains(DescripcionABuscar.ToLower()))
         {
             pendiente.MostrarTareas();
             coincidencias = true;
         }
     }
+    Console.WriteLine("\n");
     if (!coincidencias)
     {
-        Console.WriteLine("No se encontro ninguna tarea que coincida con la descripcion.");
+        Console.WriteLine("No se encontro ninguna tarea que coincida con la descripcion.\n");
     }
 }
 
 void MostrarTodasTareas(List<Tarea> TareasPendientes, List<Tarea> TareasRealizadas){
-    Console.WriteLine("\n\n\t-----TAREAS PENDIENTES-----");
+    bool contador = false;
+    Console.WriteLine("\n\n----------------TAREAS PENDIENTES-----------------");
+    Console.WriteLine($"{"ID",-5} | {"Descripción",-30} | {"Duración",-10}");
+    Console.WriteLine(new string('-', 50));
+
     foreach (Tarea pendiente in TareasPendientes)
     {
         pendiente.MostrarTareas();
+        contador = true;
     }
+    if(!contador) Console.WriteLine("No existen tareas pendientes.\n");
 
-    bool contador = false;
-    Console.WriteLine("\n\n\t-----TAREAS REALIZADAS-----");
+    contador = false;
+    Console.WriteLine("\n\n----------------TAREAS REALIZADAS-----------------");
+    Console.WriteLine($"{"ID",-5} | {"Descripción",-30} | {"Duración",-10}");
+    Console.WriteLine(new string('-', 50));
     foreach (Tarea realizada in TareasRealizadas)
     {
         realizada.MostrarTareas();
