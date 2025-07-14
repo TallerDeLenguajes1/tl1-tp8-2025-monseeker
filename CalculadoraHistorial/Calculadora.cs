@@ -1,28 +1,14 @@
-namespace EspacioCalculadora
-{
-    public enum TipoOperacion{ 
-        Suma, 
-        Resta, 
-        Multiplicacion, 
-        Division, 
-        Limpiar  // Representa la acción de borrar el resultado actual o el historial 
-    } 
+namespace CalculadoraHistorial;
 
-    public class Operacion
+public class Operacion{ 
+    private double resultadoAnterior; // Almacena el resultado previo al cálculo actual 
+    private double nuevoValor; //El valor con el que se opera sobre el resultadoAnterior 
+    private TipoOperacion operacion;// El tipo de operación realizada 
+    
+    public double Resultado
     {
-        private double resultadoAnterior; // Almacena el resultado previo al cálculo actual 
-        private double nuevoValor; //El valor con el que se opera sobre el resultadoAnterior 
-        private TipoOperacion operacion;// El tipo de operación realizada 
-
-        
-        public void Operacion(double resultadoanterior, double nuevovalor, TipoOperacion tipo){
-            resultadoAnterior = resultadoanterior;
-            nuevoValor = nuevovalor;
-            operacion = tipo;
-        }
-        
         /* Lógica para calcular o devolver el resultado */
-        public double Resultado()
+        get
         {
             double resultado = 0;
             switch (operacion)
@@ -37,15 +23,56 @@ namespace EspacioCalculadora
                     resultado = resultadoAnterior;
                 }
                 break;
-                case TipoOperacion.Limpiar: resultado = 0;
+                case TipoOperacion.Limpiar: resultado = 0; break;
             }
             return resultado;
         }
+    } 
 
-        // Propiedad pública para acceder al nuevo valor utilizado en la operación 
-        public double NuevoValor
+    public double ResultadoAnterior => resultadoAnterior;
+    // Propiedad pública para acceder al nuevo valor utilizado en la operación 
+    public double NuevoValor{ 
+        get {return nuevoValor;} 
+    } 
+
+    // Constructor u otros métodos necesarios para inicializar y gestionar la operación 
+    public Operacion(double anterior, double nuevo, TipoOperacion tipo){
+        resultadoAnterior = anterior;
+        nuevoValor = nuevo;
+        operacion = tipo;
+    } 
+}
+
+public enum TipoOperacion{ 
+Suma, 
+Resta, 
+Multiplicacion, 
+Division, 
+Limpiar  // Representa la acción de borrar el resultado actual o el historial 
+} 
+
+public class Calculadora{
+    private List<Operacion> historial = new List<Operacion>();
+    private double valorActual;
+
+    public void RealizarOperacion(double nuevo, TipoOperacion tipo){
+        Operacion nueva = new Operacion(valorActual, nuevo, tipo);
+        valorActual = nueva.Resultado;
+        historial.Add(nueva);
+    }
+
+    public void MostrarHistorial(){
+        Console.WriteLine("\nHistorial:");
+        foreach (Operacion op in historial)
         {
-            get {return nuevoValor;}
+            Console.WriteLine(op.ResultadoAnterior);
         }
     }
+
+    public void Limpiar(){
+        valorActual = 0;
+        historial.Clear();
+    }
+
+    public double ValorActual => valorActual;
 }
