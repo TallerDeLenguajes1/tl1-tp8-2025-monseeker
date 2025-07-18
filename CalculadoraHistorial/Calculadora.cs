@@ -65,7 +65,7 @@ public class Calculadora{
         Console.WriteLine("\nHistorial:");
         foreach (Operacion op in historial)
         {
-            Console.WriteLine(op.ResultadoAnterior);
+            Console.WriteLine(op.Resultado);
         }
     }
 
